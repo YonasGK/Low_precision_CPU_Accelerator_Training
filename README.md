@@ -90,4 +90,13 @@ Figure 4: Input gradient computation per layer latency of operations on Xavier
 Figure 5: Weight gradient computation per lauer latency of operation on Xavier
 
 
+We can see from the above graphs that memory copy consumes the overwhelming majority of total latency. Xavier has a shared memory architecture for the CPU and GPU(which we are using as an accelerator), however our software implementation is not taking advantage of the shared memory and is copying data back and forth between the CPU and GPU as we offload portions of the code(Conv2d) to GPU. This is a major bottleneck which need s to be addressed and which we are working towards. 
+
+    To do
+
+- Detailed OS and Kernel level analysis of data flow using(Nvidia Nsight Systems). https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+- Device a method to alleviate data copy bottleneck in systems with shared memory architecture.
+- Do further analysis(function level: https://docs.python.org/3/library/profile.html#module-cProfile and Kernel Level: Nsight System)  to stem out bottlenecks once step 2 is done and propose architecture level modifications that address the issue.
+- Used quantization to further optimize the data movement latency and computational latency
+
 
