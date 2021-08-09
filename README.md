@@ -41,6 +41,24 @@ After constructing a framework that can offload matrix multiplication(more speci
 
 (Disclaimer2: Because TensorRT is not fully open source it made it very difficult to do detailed overhead analysis on cost of data movement, hence we are also using a fully pytorch framework that offloads conv2d’s matrix multiplication operation in both forward and backward passes to Accelerator(GPU).)
 
+     4.1 Experiment 1: Per layer latency and bottleneck analysis
+
+Model: Resnet20
+Dataset: CIFAR10
+Batch size = 32
+Time: In Seconds
+Set up: 100 training iterations on Jetson Xavier, TensorRT to do conv2d operations and all other operations done on CPU.
+
+
+![image](https://user-images.githubusercontent.com/50684786/128697327-53e1ecd4-99b8-4710-b34f-d05133abbcf1.png)
+
+![image](https://lh5.googleusercontent.com/mxQ2bwW0aQmjNdoHf6rGchvXeKgRROq9TaUhxXCyjUUxB1S0zpJfP3HZDPRkBljJZMOsQ7QaOJog1K_PeSuMN0RSsK9qJUH7pRXO-dwyAo8s_JQa2uzIHAIhknydT7vU0CIggaRV)
+
+Figure 1: Forward pass per layer latency of operations on xavier
+
+![image](https://lh3.googleusercontent.com/keep-bbsk/AGk0z-MDeyQcuWstAOVUFShks3vzL7Mv1ObmIBqROIWHfAqzuNwdYG4OiwJvlCwmLkgGEASRaspboI-t3FVHhwATUMBrqX2T4DqJglTdoew)
+
+Figure 2: Back propagation input and weight gradient computation per layer latency on xavier
 
 
 
