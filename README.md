@@ -36,3 +36,4 @@ After constructing a framework that can offload matrix multiplication(more speci
 (Disclaimer: even though we were able to compose a training framework that can successfully offload conv2d operations to inference accelerators, training large models was challenging due to inherent inference frameworks(TensorRT) limitation in the number of contexts executed on inference accelerators and other software issues. Thus for all the next shown results we are using GPUs to simulate the inference engines).
 
 
+
