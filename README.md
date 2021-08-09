@@ -52,6 +52,8 @@ Set up: 100 training iterations on Jetson Xavier, TensorRT to do conv2d operatio
 
 ![image](https://user-images.githubusercontent.com/50684786/128697327-53e1ecd4-99b8-4710-b34f-d05133abbcf1.png)
 
+Vertical axis:  time in seconds for 100 runs
+
 ![image](https://lh5.googleusercontent.com/mxQ2bwW0aQmjNdoHf6rGchvXeKgRROq9TaUhxXCyjUUxB1S0zpJfP3HZDPRkBljJZMOsQ7QaOJog1K_PeSuMN0RSsK9qJUH7pRXO-dwyAo8s_JQa2uzIHAIhknydT7vU0CIggaRV)
 
 Figure 1: Forward pass per layer latency of operations on xavier
