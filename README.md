@@ -55,7 +55,7 @@ Time: In Seconds
 Set up: 100 training iterations on Jetson Xavier, TensorRT to do conv2d operations and all other operations done on CPU.
 
 
-![image](https://user-images.githubusercontent.com/50684786/128697327-53e1ecd4-99b8-4710-b34f-d05133abbcf1.png)
+![image](https://user-images.githubusercontent.com/50684786/128705747-8955a121-554d-43ab-91b8-a27b0329be43.png)
 
 Vertical axis:  time in seconds for 100 runs
 
