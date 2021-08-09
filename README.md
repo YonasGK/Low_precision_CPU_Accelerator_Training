@@ -63,7 +63,8 @@ Vertical axis:  time in seconds for 100 runs
 
 Figure 1: Forward pass per layer latency of operations on xavier
 
-![image](https://lh3.googleusercontent.com/keep-bbsk/AGk0z-MDeyQcuWstAOVUFShks3vzL7Mv1ObmIBqROIWHfAqzuNwdYG4OiwJvlCwmLkgGEASRaspboI-t3FVHhwATUMBrqX2T4DqJglTdoew)
+![image](https://user-images.githubusercontent.com/50684786/128705144-e17f78dc-ca6e-4894-9ec9-11d305fef6dd.png)
+
 
 Figure 2: Back propagation(input and weight gradient) computation per layer latency on xavier
 
@@ -81,7 +82,7 @@ Set up: 100 training iterations on Jetson Xavier, full pytorch framework where w
 
 Vertical Axis: Time in Seconds
 
-![image](https://user-images.githubusercontent.com/50684786/128698889-f0968117-bca9-4a64-a438-dd708a9babb8.png)
+![image](https://user-images.githubusercontent.com/50684786/128705273-619ceb31-b888-4a68-838f-e726fc30b1f7.png)
 Figure 3: Forward Pass per layer latency of operations on Xavier
 ![image](https://user-images.githubusercontent.com/50684786/128698986-964e6c36-574c-4ff4-9a38-140ec1f0cce2.png)
 Figure 4: Input gradient computation per layer latency of operations on Xavier
