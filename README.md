@@ -26,7 +26,8 @@ Our proposed approach to training DNNs on edge consists of both hardware and sof
 
         3.1 Software
 
-As mentioned above on edge inference is a ubiquitous  and there are many frameworks(TensorRT, Tensorflow lite …) to enable edge inference and access inference accelerators. However training is actually done on Pytorch and Tensorflow frameworks which are not well suited for inference accelerators. Thus we have to make a simple composite framework from the inference framework and training framework, where we use the inference framework to access the inference accelerator for GEMM operations.
+As mentioned above on edge inference is a ubiquitous  and there are many frameworks(TensorRT, Tensorflow lite …) to enable edge inference and access inference accelerators. However training is actually done on Pytorch and Tensorflow frameworks which are not well suited for inference accelerators. Thus we have to make a simple composite framework from the inference framework and training framework, where we use the inference framework to access the inference accelerator for GEMM operations.  The framework essentially creates a custom conv2d module, where the conv2d operations of both forward and backward passes are offloaded to Accelerator while all other operations are done on CPU.
+
 
         3.2. Hardware
 
@@ -37,6 +38,9 @@ As mentioned above our target hardware is a system that contains a CPU and an in
 After constructing a framework that can offload matrix multiplication(more specifically: conv2d) to the inference accelerator. Our next task was to analyse the function level latency to stem out major bottlenecks, so that we can propose the appropriate software level quantization algorithms and hardware level minimal tunings to alleviate the bottleneck. The Preliminary results obtained are shown below. 
 
 (Disclaimer: even though we were able to compose a training framework that can successfully offload conv2d operations to inference accelerators, training large models was challenging due to inherent inference frameworks(TensorRT) limitation in the number of contexts executed on inference accelerators and other software issues. Thus for all the next shown results we are using GPUs to simulate the inference engines).
+
+(Disclaimer2: Because TensorRT is not fully open source it made it very difficult to do detailed overhead analysis on cost of data movement, hence we are also using a fully pytorch framework that offloads conv2d’s matrix multiplication operation in both forward and backward passes to Accelerator(GPU).)
+
 
 
 
