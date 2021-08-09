@@ -43,10 +43,15 @@ After constructing a framework that can offload matrix multiplication(more speci
 
      4.1 Experiment 1: Per layer latency and bottleneck analysis
 TensorRT Test
+
 Model: Resnet20
+
 Dataset: CIFAR10
+
 Batch size = 32
+
 Time: In Seconds
+
 Set up: 100 training iterations on Jetson Xavier, TensorRT to do conv2d operations and all other operations done on CPU.
 
 
@@ -63,11 +68,17 @@ Figure 1: Forward pass per layer latency of operations on xavier
 Figure 2: Back propagation(input and weight gradient) computation per layer latency on xavier
 
 Pytorch Test
+
 Model: Resnet20
+
 Dataset: CIFAR10
+
 Batch size = 32
+
 Time: In Seconds
+
 Set up: 100 training iterations on Jetson Xavier, full pytorch framework where we use a custom conv2d module to offload conv2d training operation onto GPU .
+
 Vertical Axis: Time in Seconds
 
 ![image](https://user-images.githubusercontent.com/50684786/128698889-f0968117-bca9-4a64-a438-dd708a9babb8.png)
