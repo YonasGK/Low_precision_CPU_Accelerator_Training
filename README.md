@@ -60,11 +60,13 @@ In order to assess the major function level bottlenecks, our first test was Tens
 ![image](https://user-images.githubusercontent.com/50684786/128705747-8955a121-554d-43ab-91b8-a27b0329be43.png)
 
 
-![figure1_4](https://user-images.githubusercontent.com/50684786/128811546-f69c2887-ca51-430a-9665-3e5916022630.png)
+![figure1](https://user-images.githubusercontent.com/50684786/128812767-635cec61-2251-40cc-8a62-c1cd68324c56.png)
+
 
 Figure 1: Latency of layers on forward pass for 100 training iterations with Pytorch-TensorRT implementation
 
-![figure2_2](https://user-images.githubusercontent.com/50684786/128811247-8cb31f9e-7c0a-4bdb-8707-03ef0c866bd2.png)
+![figure2](https://user-images.githubusercontent.com/50684786/128812932-03694d84-d604-4ff6-a777-ae7c3d6e6d4c.png)
+
 
 Figure 2: Latency of layers on input and weight gradient computation for 100 training iterations with Pytorch-TensorRT implementation
 
@@ -82,10 +84,12 @@ Set up: 100 training iterations on Jetson Xavier, full pytorch framework where w
 
 Vertical Axis: Time in Seconds
 
-![figure3_1](https://user-images.githubusercontent.com/50684786/128811806-8bb132aa-0251-4935-ba59-071ad1093be9.png)
+![figure3](https://user-images.githubusercontent.com/50684786/128813184-06d31fb5-0dd5-417d-b7e4-f9822612519d.png)
+
 
 Figure 3: Latency of layers on forward pass for 100 training iterations with full Pytorch implementation
-![figure4](https://user-images.githubusercontent.com/50684786/128812089-fe3fba24-8a0c-4183-86b7-3edea7056c26.png)
+
+![figure4](https://user-images.githubusercontent.com/50684786/128813349-5492952d-24c0-4200-8481-2e08dd0477c5.png)
 
 Figure 4:Latency of layers on input and weight gradient computation for 100 training iterations with full Pytorch implementation
 
