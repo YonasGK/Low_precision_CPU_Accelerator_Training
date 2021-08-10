@@ -60,12 +60,11 @@ In order to assess the major function level bottlenecks, our first test was Tens
 ![image](https://user-images.githubusercontent.com/50684786/128705747-8955a121-554d-43ab-91b8-a27b0329be43.png)
 
 
-![image](https://user-images.githubusercontent.com/50684786/128804488-fa4b3097-5a3b-471c-aebe-43c0cc0ba7d0.png)
-
+![figure1_4](https://user-images.githubusercontent.com/50684786/128811546-f69c2887-ca51-430a-9665-3e5916022630.png)
 
 Figure 1: Latency of layers on forward pass for 100 training iterations with Pytorch-TensorRT implementation
 
-![image](https://user-images.githubusercontent.com/50684786/128805250-4b26a24d-2403-49d8-bb1d-97d45c072df7.png)
+![figure2_2](https://user-images.githubusercontent.com/50684786/128811247-8cb31f9e-7c0a-4bdb-8707-03ef0c866bd2.png)
 
 Figure 2: Latency of layers on input and weight gradient computation for 100 training iterations with Pytorch-TensorRT implementation
 
@@ -83,9 +82,11 @@ Set up: 100 training iterations on Jetson Xavier, full pytorch framework where w
 
 Vertical Axis: Time in Seconds
 
-![image](https://user-images.githubusercontent.com/50684786/128799534-d2fe7079-8db7-406f-885a-ccb9308f7d5c.png)
+![figure3_1](https://user-images.githubusercontent.com/50684786/128811806-8bb132aa-0251-4935-ba59-071ad1093be9.png)
+
 Figure 3: Latency of layers on forward pass for 100 training iterations with full Pytorch implementation
-![image](https://user-images.githubusercontent.com/50684786/128804217-704e0755-0548-4c62-ac13-48ade169afe0.png)
+![figure4](https://user-images.githubusercontent.com/50684786/128812089-fe3fba24-8a0c-4183-86b7-3edea7056c26.png)
+
 Figure 4:Latency of layers on input and weight gradient computation for 100 training iterations with full Pytorch implementation
 
 As it can be viewed in the above graphs stream synchoronization is not independently accounted for in the full pytorch implementation. This is due to the absence of explicit stream synchronization calls on the pytorch implementation. However on the TensorRT implmentation we have to have an explicit stream synchronization call right after an execution call in order to synchronize output obtained from the execution phase.
