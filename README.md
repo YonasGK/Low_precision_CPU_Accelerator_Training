@@ -54,19 +54,20 @@ Time: In Seconds
 
 Set up: 100 training iterations on Jetson Xavier, TensorRT to do conv2d operations and all other operations done on CPU.
 
+In order to assess the major function level bottlenecks, our first test was TensorRT Test. In this test we used the layers from a Resnet20 architecure, and profiled each layer for 100 runs on function granuality level using python's Cprofiler.
+
 
 ![image](https://user-images.githubusercontent.com/50684786/128705747-8955a121-554d-43ab-91b8-a27b0329be43.png)
 
-Vertical axis:  time in seconds for 100 runs
 
-![image](https://lh5.googleusercontent.com/mxQ2bwW0aQmjNdoHf6rGchvXeKgRROq9TaUhxXCyjUUxB1S0zpJfP3HZDPRkBljJZMOsQ7QaOJog1K_PeSuMN0RSsK9qJUH7pRXO-dwyAo8s_JQa2uzIHAIhknydT7vU0CIggaRV)
-
-Figure 1: Forward pass per layer latency of operations on xavier
-
-![image](https://user-images.githubusercontent.com/50684786/128705144-e17f78dc-ca6e-4894-9ec9-11d305fef6dd.png)
+![image](https://user-images.githubusercontent.com/50684786/128804488-fa4b3097-5a3b-471c-aebe-43c0cc0ba7d0.png)
 
 
-Figure 2: Back propagation(input and weight gradient) computation per layer latency on xavier
+Figure 1: Latency of layers on forward pass for 100 training iterations with Pytorch-TensorRT implementation
+
+![image](https://user-images.githubusercontent.com/50684786/128805250-4b26a24d-2403-49d8-bb1d-97d45c072df7.png)
+
+Figure 2: Latency of layers on input and weight gradient computation for 100 training iterations with Pytorch-TensorRT implementation
 
 Pytorch Test
 
@@ -82,13 +83,12 @@ Set up: 100 training iterations on Jetson Xavier, full pytorch framework where w
 
 Vertical Axis: Time in Seconds
 
-![image](https://user-images.githubusercontent.com/50684786/128705273-619ceb31-b888-4a68-838f-e726fc30b1f7.png)
-Figure 3: Forward Pass per layer latency of operations on Xavier
-![image](https://user-images.githubusercontent.com/50684786/128698986-964e6c36-574c-4ff4-9a38-140ec1f0cce2.png)
-Figure 4: Input gradient computation per layer latency of operations on Xavier
-![image](https://user-images.githubusercontent.com/50684786/128699121-1b0a773a-85ae-4c1d-9ea5-cc4c5c637c4a.png)
-Figure 5: Weight gradient computation per lauer latency of operation on Xavier
+![image](https://user-images.githubusercontent.com/50684786/128799534-d2fe7079-8db7-406f-885a-ccb9308f7d5c.png)
+Figure 3: Latency of layers on forward pass for 100 training iterations with full Pytorch implementation
+![image](https://user-images.githubusercontent.com/50684786/128804217-704e0755-0548-4c62-ac13-48ade169afe0.png)
+Figure 4:Latency of layers on input and weight gradient computation for 100 training iterations with full Pytorch implementation
 
+As it can be viewed in the above graphs stream synchoronization is not independently accounted for in the full pytorch implementation. This is due to the absence of explicit stream synchronization calls on the pytorch implementation. However on the TensorRT implmentation we have to have an explicit stream synchronization call right after an execution call in order to synchronize output obtained from the execution phase.
 
 We can see from the above graphs that memory copy consumes the overwhelming majority of total latency. Xavier has a shared memory architecture for the CPU and GPU(which we are using as an accelerator), however our software implementation is not taking advantage of the shared memory and is copying data back and forth between the CPU and GPU as we offload portions of the code(Conv2d) to GPU. This is a major bottleneck which need s to be addressed and which we are working towards. 
 
