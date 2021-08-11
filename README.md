@@ -21,7 +21,8 @@ However we would like to focus on cases where data is gathered and labeled on th
 Our proposed approach to training DNNs on edge consists of both hardware and software modifications. Since edge devices have computational capability, memory and energy constraints, our training models have to be kept as small as possible. One popular method to do that is model quantization. Quantization has shown to be a promising approach to compress inference models. Over the years many algorithms have been proposed for quantization aware training and low precision training. These algorithms have made it possible to obtain a state of the art performance, while carrying out data movement and execution in low precision  .  Hence we plan to leverage these algorithms in order to account for resource constraints. Our target hardware system is a system that has a CPU and an Inference Accelerator with shared memory similar to the architecture below. Having the system architecture as shown below will enable us to offload all the heavy-weight matrix multiplication operations to the accelerator and do other general operations on CPU.
 
  
-![alt text](https://lh6.googleusercontent.com/mOCoIOeMZrPrJl8SEF3jHN18cTdbWE2oQDWs59qxvS5AejcHpfz7tt3cPv63xGFeF9kbrZsb5B8OxvsDyxBz2stKTDiVEqKNotF_xXqRZxYjLhrpRHsXmA2u-pnH47f9tXIh414p)
+![image](https://user-images.githubusercontent.com/50684786/128959228-c6b4dedb-b1bb-43b0-b2ac-9a16ed8a0272.png)
+
 
 
         3.1 Software
