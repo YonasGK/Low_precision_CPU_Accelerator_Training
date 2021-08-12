@@ -1,3 +1,39 @@
+"""
+A Pytorch+TensorRT custom convolution module to offload convolution operation of both forward and back propagation onto GPU.
+
+Our implementation Basically consisits of 4 modules.
+
+The first module (Conv_2d_DLA) is the custom convolution layer that is used to build/initilized models and accepts a similar
+set of parameters as nn.Conv2d(). After initilization on the first iteration of the forward call we execute the training using
+a vanilla conv2d module on CPU. We use a vanilla Con2d, defined during intitlization, for the first iteration to capture the input size of the layer. This input shape is
+important because we need the input shape to create the inference engine where we will run our convolution layer(Disclaimer: it is possible
+to define the engine with a dynamic input shape, but I run into multiple issues when trying to run training).On the second iteration we create and
+initilize an engine to compute the forward pass convolution operation. 
+
+The Engine is created by using the use_DLA() module. After creating a module we then have to call an initilize_engine member function to initilize
+an execution engine, allocate buffers and create an execution context. In the engine creating stage, an engine builder, builder configuration instance and
+a network are created. Next the network needs to be populated with a series of layers and corresponding weight for the layers. We also need to specify engine
+configurations such as maximum batch size, maximum working size etc... After an engine is create we need to allocate memory buffers for the input and output of
+the engine. Lastly we need to create an execution context. 
+
+Once we have our engine, allocated buffers and execution context, we proceed invoke an autograd module.
+
+In Autograd Module forward function call, we first save the tensors and parameters necessary for back propagation. Next it calls a member function for the
+engine module. In this function, we refit(load) the weight to GPU, load the input activation to GPU and do the computation. When the results are returned the
+array is a numpy 2d array, which we need to reshape to 4d tensor. 
+
+During Back Propagation, in backward() function of the custom autograd module,we first need to reload the tensors and parameters saved during forward pass. 
+If this is the first time this function is called we create a module, Conv2d_DLA_grad(), to compute input and weight gradient. Next we call the member functions
+of the module to get the input and weight gradient.
+
+The Conv2d_DLA_grad() creates an engine each, for input gradient and weight gradient computation. After creating the engines during initilization the member
+functions input gradient and weight gradient can be called to return the respective gradient.
+
+For subseqent iterations(iteration >=3), since we have the engine and context already created we only need to call autograd apply(), which in turn calls only
+the execution functions of output activation, input gradient and weight gradinet, where the weight is refitted, input is loaded and conv2d() operation is carried
+out on GPU/Accelerator using TensorRT implementation.
+
+"""
 import torch
 import numpy as np
 import torch.nn as nn
@@ -16,7 +52,7 @@ import warnings
 TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
 
 """
-A class to create a newtork, populate the network, create an engine, initilize the engine, create a context and do inference on the accelerator 
+A class to create a newtork, populate the network, create an engine, initilize the engine, allocate buffer create a context and do inference on the accelerator 
 """
 class use_DLA():
     def __init__(self, input_name="conv", input_shape=(1,28,28), output_channel=0, kernel_shape=(3,3),dtype=trt.float16, stride=(1,1),
@@ -40,9 +76,9 @@ class use_DLA():
         self.grad_weight=grad_weight
         self.batch_size=batch_size
         self.context=self.engine=self.inputs=self.outputs=self.bindings=self.stream=None
-
+    #populuate the network for the forward pass and input gradient execution engine which use convolution
     def populate_network(self, network, weights, bias):
-        # Configure the forward pass network layers based on the weights provided and the parameters specified.
+        # Configure network layers based on the weights provided and the parameters specified.
         input_tensor = network.add_input(name=self.input_name, dtype=self.dtype, shape=trt.DimsCHW(self.input_shape))
         conv1_w = weights.detach().numpy()
         conv1_b=None
@@ -56,6 +92,7 @@ class use_DLA():
         conv1.num_groups=self.groups
 
         network.mark_output(tensor=conv1.get_output(0))
+    #populate the network for the weight gradient engine which uses deconvolution(transposed convolution)
     def populate_network_deconv(self, network, weights, bias):
          # Configure the back pass input gradient network layers based on the weights provided and the parameters specified.
         input_tensor = network.add_input(name=self.input_name, dtype=self.dtype, shape=trt.DimsCHW(self.input_shape))
@@ -70,7 +107,7 @@ class use_DLA():
         conv1.padding= self.padding
         conv1.num_groups=self.groups
         network.mark_output(tensor=conv1.get_output(0))
-
+    #build an engine for the forward pass with configurations
     def build_engine(self,weights, bias):
         # build an with configuration engine for the forward pass
         with trt.Builder(TRT_LOGGER) as builder, builder.create_builder_config() as config, builder.create_network() as network:
@@ -84,11 +121,11 @@ class use_DLA():
             self.populate_network(network, weights, bias)
             self.network=network
             return builder.build_engine(network, config)
-
+    #build the engines for input and weight gradient with configuration
     def build_engine_back(self,weights, bias):
         # build an with configuration engine for the back pass
         with trt.Builder(TRT_LOGGER) as builder, builder.create_builder_config() as config, builder.create_network() as network:
-            # if the engien is for weight gradient computation set the batch size as 1
+            # if the engine is for weight gradient computation set the batch size as 1
             if self.grad_weight == True:
                 builder.max_batch_size = 1
             else:
@@ -106,10 +143,11 @@ class use_DLA():
             # Build and return an engine.
             return builder.build_engine(network, config)
 
-    # Loads input from cpu
+    # Loads input from cpu to GPU/Accelerator for forward pass
     def load_input_forward(self, pagelocked_buffer, inputs_cpu):
         img=inputs_cpu.flatten()
         np.copyto(pagelocked_buffer,img)
+    # Loads input from cpu to GPU/Accelerator for back propagation(input and weight gradient) 
     def load_input_back(self, pagelocked_buffer, inputs_cpu):
         img=inputs_cpu.flatten()
         np.copyto(pagelocked_buffer,img)
@@ -120,7 +158,7 @@ class use_DLA():
         self.inputs, self.outputs, self.bindings, self.stream = common.allocate_buffers(self.engine)
         self.context=self.engine.create_execution_context()
 
-    # intialize engine: build engine, allocate buffers and create execution context object for the forward pass engine.
+    # intialize engine: build engine, allocate buffers and create execution context object for the backpass engines.
     def initialize_engine_back(self):
         self.engine=self.build_engine_back(self.weights, self.bias)
         self.inputs, self.outputs, self.bindings, self.stream = common.allocate_buffers(self.engine)
@@ -130,7 +168,7 @@ class use_DLA():
     def forward(self, weights, bias,inputs_cpu):
 
         output=None
-        #start=time.time()
+        
         with trt.Refitter(self.engine, TRT_LOGGER) as refitter:
             refitter.set_weights("conv_1", trt.WeightsRole.KERNEL, weights.detach().numpy())
             if bias is not None:
@@ -158,7 +196,8 @@ class use_DLA():
 
 
 """
-A custom autograd module to maintain the dynamic computational graph for Pytorch
+A custom autograd module to maintain the dynamic computational graph for Pytorch for the custom conv2d module
+
 """
 class use_DLA_autograd(torch.autograd.Function):
 
@@ -216,15 +255,14 @@ class Conv_2d_DLA(nn.Module):
          self.dilation=dilation
          self.grad=None
          self.groups=groups
-         self.weights=torch.nn.Parameter(torch.randn(output_channel, in_channel,kernel_shape[0], kernel_shape[1]), requires_grad=True)
+         self.weights=None
          self.bias=torch.rand(output_channel)
-         self.conv_vanilla=None
          #a pytorch conv layer for the first iteration to obtain input shape
+         self.conv_vanilla=nn.Conv2d(self.in_channel, self.out_channel, kernel_size=self.kernel_shape[0], stride=self.stride[0], padding=self.padding[0], groups=self.groups ,bias=False).to("cpu")
     def forward(self, inputs_cpu):
         out=None
         #On the first iteration do the operation on CPU and obtain the input shape needed to create a TensorRT conv network
         if self.stages==0:
-            self.conv_vanilla=nn.Conv2d(self.in_channel, self.out_channel, kernel_size=self.kernel_shape[0], stride=self.stride[0], padding=self.padding[0], groups=self.groups ,bias=False).to("cpu")
             out=self.conv_vanilla(inputs_cpu)
             self.inputs_shape=inputs_cpu.shape
             self.stages=1

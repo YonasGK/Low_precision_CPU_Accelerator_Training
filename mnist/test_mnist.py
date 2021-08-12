@@ -17,11 +17,11 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.conv1_dla=dla.Conv_2d_DLA(in_channel=1, output_channel=20, kernel_shape=(5,5))
-        self.conv1 = nn.Conv2d(1, 20, 5, 1, bias=False)
+        #self.conv1 = nn.Conv2d(1, 20, 5, 1, bias=False)
         self.relu1 = nn.ReLU(inplace=False)
         self.pool1 = nn.MaxPool2d(2, 2)
         self.conv2_dla= dla.Conv_2d_DLA(in_channel=20, output_channel =50, kernel_shape=(5,5))
-        self.conv2 = nn.Conv2d(20, 50, 5, 1, bias=False)
+        #self.conv2 = nn.Conv2d(20, 50, 5, 1, bias=False)
         self.relu2 = nn.ReLU(inplace=False)
         self.pool2 = nn.MaxPool2d(2, 2)
         self.fc1 = nn.Linear(4*4*50, 500)

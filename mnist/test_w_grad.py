@@ -4,7 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 import tensorrt as trt
-import conv_CPU_DLA_grad as dla
+import conv_CPU_Acc_TensorRT as dla
 
 
 inputs=torch.randn(1,20, 12, 12)
