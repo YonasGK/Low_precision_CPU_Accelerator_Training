@@ -95,7 +95,12 @@ class custom_conv2d_grad(torch.autograd.Function):
         ctx.dilation=dilation
         
         inputs_cuda, weights_cuda = move_data_forward(inputs_cpu, weights) 
+        #model=model.cuda()
+        #out=model(inputs_cuda)
+        #inputs_cpu = inputs_cuda.cpu()
 
+        #model=model.cpu()
+        #print(inputs_cpu.device)
         out=compute_forward(inputs_cuda, weights_cuda, stride, padding, dilation, groups)
         return return_result_to_cpu_forward(out)
     @staticmethod
@@ -134,6 +139,6 @@ class custom_conv2d(nn.Module):
     def forward(self, inputs):
         
         out= custom_conv2d_grad.apply(inputs, self.conv1.weight, self.conv1, self.padding, self.stride, self.dilation, self.groups)
-        
+
         return out
 

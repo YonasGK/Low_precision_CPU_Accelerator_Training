@@ -31,7 +31,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.init as init
-import conv_CPU_DLA_grad as dla
+import conv_CPU_Acc_TensorRT as dla
 from torch.autograd import Variable
 import tensorrt as trt 
 __all__ = ['ResNet', 'resnet20', 'resnet32', 'resnet44', 'resnet56', 'resnet110', 'resnet1202']

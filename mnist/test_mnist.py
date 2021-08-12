@@ -1,7 +1,7 @@
 from __future__ import print_function
 import argparse
 import torch
-import conv_CPU_GPU_pytorch as dla
+import conv_CPU_Acc_TensorRT as dla
 #import linear_DLA as dla_fc
 import tensorrt as trt
 import torch.nn as nn
@@ -16,11 +16,11 @@ from torch.optim.lr_scheduler import StepLR
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1_dla=dla.custom_conv2d(in_channel=1, out_channel=20, kernel_shape=(5,5))
+        self.conv1_dla=dla.Conv_2d_DLA(in_channel=1, output_channel=20, kernel_shape=(5,5))
         self.conv1 = nn.Conv2d(1, 20, 5, 1, bias=False)
         self.relu1 = nn.ReLU(inplace=False)
         self.pool1 = nn.MaxPool2d(2, 2)
-        self.conv2_dla= dla.custom_conv2d(in_channel=20, out_channel =50, kernel_shape=(5,5))
+        self.conv2_dla= dla.Conv_2d_DLA(in_channel=20, output_channel =50, kernel_shape=(5,5))
         self.conv2 = nn.Conv2d(20, 50, 5, 1, bias=False)
         self.relu2 = nn.ReLU(inplace=False)
         self.pool2 = nn.MaxPool2d(2, 2)
@@ -51,7 +51,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
             end = time.time()
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
-        print("here") 
+         
         output = model(data)
         #print(output)
         loss = F.nll_loss(output, target)

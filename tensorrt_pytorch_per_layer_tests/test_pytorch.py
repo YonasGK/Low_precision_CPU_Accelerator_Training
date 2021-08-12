@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import tensorrt as trt 
-import conv_CPU_GPU_pytorch as dla
+import conv_CPU_Acc_pytorch as dla
 import cProfile, pstats, io
 
 

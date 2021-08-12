@@ -56,20 +56,24 @@ parser.add_argument('--save-dir', dest='save_dir',
 parser.add_argument('--save-every', dest='save_every',
                     help='Saves checkpoints at every specified number of epochs',
                     type=int, default=10)
+parser.add_argument('--no-cuda', action='store_true', default=False,
+                        help='disables CUDA training')
+
 best_prec1 = 0
 
 
 def main():
-    global args, best_prec1
+    global args, best_prec1, device
     args = parser.parse_args()
-
+    use_cuda = not args.no_cuda and torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
 
     # Check the save_dir exists or not
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
 
     model = resnet.__dict__[args.arch]()
-    model.cpu()
+    model.to(device)
 
     # optionally resume from a checkpoint
     if args.resume:
@@ -108,7 +112,7 @@ def main():
         num_workers=args.workers, pin_memory=True)
 
     # define loss function (criterion) and optimizer
-    criterion = nn.CrossEntropyLoss().cpu()
+    criterion = nn.CrossEntropyLoss().to(device)
 
     if args.half:
         model.half()
@@ -179,8 +183,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
         # measure data loading time
         data_time.update(time.time() - end)
 
-        target = target.cpu()
-        input_var = input.cpu()
+        target = target.to(device)
+        input_var = input.to(device)
         target_var = target
         if args.half:
             input_var = input_var.half()
@@ -234,9 +238,9 @@ def validate(val_loader, model, criterion):
     end = time.time()
     with torch.no_grad():
         for i, (input, target) in enumerate(val_loader):
-            target = target.cpu()
-            input_var = input.cpu()
-            target_var = target.cpu()
+            target = target.to(device)
+            input_var = input.to(device)
+            target_var = target.to(device)
 
             if args.half:
                 input_var = input_var.half()

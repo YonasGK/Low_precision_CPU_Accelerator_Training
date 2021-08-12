@@ -20,7 +20,7 @@ A class to create a newtork, populate the network, create an engine, initilize t
 """
 class use_DLA():
     def __init__(self, input_name="conv", input_shape=(1,28,28), output_channel=0, kernel_shape=(3,3),dtype=trt.float16, stride=(1,1),
-            padding=(0,0),dilation=(1,1), weights=None, bias=None, groups=1, grad_weight=False):
+            padding=(0,0),dilation=(1,1), weights=None, bias=None, groups=1, grad_weight=False, batch_size=1):
         super(use_DLA, self).__init__()
         self.input_name=input_name
         self.input_shape=input_shape
@@ -38,6 +38,7 @@ class use_DLA():
         self.refitter=None
         self.groups=groups
         self.grad_weight=grad_weight
+        self.batch_size=batch_size
         self.context=self.engine=self.inputs=self.outputs=self.bindings=self.stream=None
 
     def populate_network(self, network, weights, bias):
@@ -74,7 +75,7 @@ class use_DLA():
         # build an with configuration engine for the forward pass
         with trt.Builder(TRT_LOGGER) as builder, builder.create_builder_config() as config, builder.create_network() as network:
 
-            builder.max_batch_size = 4
+            builder.max_batch_size = self.batch_size
             builder.refittable= True
             config.default_device_type= trt.DeviceType.GPU
             config.set_flag(trt.BuilderFlag.REFIT)
@@ -91,7 +92,7 @@ class use_DLA():
             if self.grad_weight == True:
                 builder.max_batch_size = 1
             else:
-                builder.max_batch_size = 4
+                builder.max_batch_size = self.batch_size
             builder.refittable =True
             config.default_device_type= trt.DeviceType.GPU
             config.max_workspace_size= 1 << 30
@@ -232,7 +233,7 @@ class Conv_2d_DLA(nn.Module):
             self.weights=self.conv_vanilla.weight
             self.bias=self.conv_vanilla.bias
             self.model=use_DLA("conv",(self.inputs_shape[1:4]),self.out_channel, self.kernel_shape, self.dtype, self.stride, self.padding, self.dilation,
-                    self.weights, self.bias, self.groups)
+                    self.weights, self.bias, self.groups,batch_size=inputs_cpu.shape[0])
             self.model.initialize_engine()
             out = use_DLA_autograd.apply(self, inputs_cpu, self.weights, self.bias, self.model, self.padding, self.stride, self.stages,self.groups)
             self.stages=2
@@ -262,8 +263,7 @@ class Conv2d_DLA_grad(nn.Module):
             post_pad= inputs.shape[2] - (stride[0]*(grad_out.shape[2]-1) + weight.shape[2]- 2*padding[0])
             if post_pad<0:
                 post_pad=0
-            #if post_pad > weight.shape[2]:
-            #    post_pad=weight.shape[2]
+            
             self.pad=(0,post_pad, 0, post_pad)
             self.post_pad=(post_pad, post_pad)
             
@@ -274,7 +274,7 @@ class Conv2d_DLA_grad(nn.Module):
                     1, self.grad_out1.shape[2], self.grad_out1.shape[3])
             #tensorRT deconvolution object to compute input gradient 
             self.grad_in=use_DLA("conv",trt.DimsCHW(self.grad_out_padded.shape[1:4]),self.inputs.shape[1],
-                    self.kernel_shape, trt.float16, self.stride, self.padding, self.post_pad, self.weight, self.bias, self.groups)
+                    self.kernel_shape, trt.float16, self.stride, self.padding, self.post_pad, self.weight, self.bias, self.groups, batch_size=inputs.shape[0])
             #tensorRT convolution object to comput weight gradient
             self.grad_w=use_DLA("conv",trt.DimsCHW(self.inputs.shape[0]* self.inputs.shape[1],
                     self.inputs.shape[2], self.inputs.shape[3]), self.grad_out2.shape[0],
