@@ -1,3 +1,5 @@
+# MNIST TEST
+
 1. MNIST TEST
     
     This test is used to demostrate the convergence of real models constructed from the custom conv2d modules provided. The architecture is a simple 2 convolutional layer followed by 2 fully connected layers.
