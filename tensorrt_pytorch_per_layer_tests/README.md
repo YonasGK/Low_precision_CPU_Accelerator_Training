@@ -1,3 +1,5 @@
+# TensorRT and Pytorch Per Layer Tests
+
 1. Per Layer experiment Code
 
       This experiment is for per layer analysis of any type of convolutional layer. The tests are written in test_pytorch.py and test_tensorrt.py. The tests involoves a single convolution layer. We run a training loop on the single layer by feeding it input and having a ground truth that has the same dimension as the output activation. We run 150 training loops and can profile using either CProfile https://docs.python.org/3/library/profile.html#module-cProfile for a function level analysis or nvidia nsight systems https://docs.nvidia.com/nsight-systems/UserGuide/index.html for kernel level analysis.
