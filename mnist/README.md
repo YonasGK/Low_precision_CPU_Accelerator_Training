@@ -2,6 +2,7 @@
     
     This test is used to demostrate the convergence of real models constructed from the custom conv2d modules provided. The architecture is a simple 2 convolutional layer followed by 2 fully connected layers.
 2. Constructing a model
+    
     A. Defining a Layer
         
       Our implementation is designed so that you can treat the custom conv2d layers as the native torch.nn.Conv2d module. Hence by replacing the native convolution layers with the custom ones we can run the test as we would with any other training model.
