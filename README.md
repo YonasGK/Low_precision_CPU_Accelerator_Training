@@ -1,10 +1,4 @@
-1, Per layer test tensorrt and pytorch
-
-2, mnist test tensorrt and pytorch
-
-3, resnet test tensorrt and pytorch
-
- DNN training with cpu + inference accelerator
+# DNN training with CPU + inference accelerator
 
     1. Introduction
 
@@ -99,6 +93,16 @@ Figure 4:Latency of layers on input and weight gradient computation for 100 trai
 As it can be viewed in the above graphs stream synchoronization is not independently accounted for in the full pytorch implementation. This is due to the absence of explicit stream synchronization calls on the pytorch implementation. However on the TensorRT implmentation we have to have an explicit stream synchronization call right after an execution call in order to synchronize output obtained from the execution phase.
 
 We can see from the above graphs that memory copy consumes the overwhelming majority of total latency. Xavier has a shared memory architecture for the CPU and GPU(which we are using as an accelerator), however our software implementation is not taking advantage of the shared memory and is copying data back and forth between the CPU and GPU as we offload portions of the code(Conv2d) to GPU. This is a major bottleneck which need s to be addressed and which we are working towards. 
+
+ ** You can find tests in the following directories**
+ 1. Per layer test tensorrt and pytorch: /tensorrt_per_layer_test
+
+ 2. mnist test tensorrt and pytorch: /mnist
+
+ 3. resnet test tensorrt and pytorch: /resnet
+ Note
+ 
+ The above tests are all done with pytorch 1.8.0 and TenorRT version 7.1.3.0, both on Jetson Xavier and PC.
 
     To do
 
