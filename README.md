@@ -100,9 +100,10 @@ We can see from the above graphs that memory copy consumes the overwhelming majo
  2. mnist test tensorrt and pytorch: /mnist
 
  3. resnet test tensorrt and pytorch: /resnet
+ 
  Note
  
- The above tests are all done with pytorch 1.8.0 and TenorRT version 7.1.3.0, both on Jetson Xavier and PC.
+ The above tests are all done with pytorch v1.8.0 (https://pytorch.org/tutorials/) and TenorRT v7.1.3.0(https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/index.html), both on Jetson Xavier and PC.
 
     To do
 
