@@ -40,7 +40,7 @@ A. Defining a Layer
        
    **FOR full Pytorch custom convolution layer** 
         
-       import conv_CPU_Acc_pytoch as dla
+       import conv_CPU_Acc_pytorch as dla
        self.conv1=dla.custom_conv2d(in_channel=1, out_channel=0, kernel_shape=(3,3), stride=(1,1), padding=(0,0), dilation=(1,1), groups=1, bias=False)
        
    B. Running Test
