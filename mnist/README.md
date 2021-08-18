@@ -60,7 +60,7 @@
          $ python3 test_mnist --no-cuda --batch-size=4
          
   3. Notes
-       - When running the test code(test_mnist.py) with the custom layers bw sure to use the --no-cuda option. Without that the model will be mapped to GPU/Accelerator and the test will fail.
+       - When running the test code(test_mnist.py) with the custom layers be sure to use the --no-cuda option. Without that option the model will be completely mapped to GPU/Accelerator and the test will fail.
        - Due to memory limitation on the Xavier platform when running the test codes avoid using very large batch sizes.
        - When running on a PC environment you can get a docker image from https://ngc.nvidia.com/catalog/containers/nvidia:tensorrt which has tensorrt set up.
     
