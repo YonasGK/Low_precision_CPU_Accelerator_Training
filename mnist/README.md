@@ -31,7 +31,8 @@
        self.conv1=dla.custom_conv2d(in_channel=1, out_channel=0, kernel_shape=(3,3), stride=(1,1), padding=(0,0), dilation=(1,1), groups=1, bias=False)
        
      B. Running Test
-        You can run the test file test_mnist.py with the following options
+     
+      You can run the test file test_mnist.py with the following options
         
             
          $ python3 test_mnist.py --help
