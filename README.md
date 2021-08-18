@@ -110,6 +110,7 @@ We can see from the above graphs that memory copy consumes the overwhelming majo
 - Detailed OS and Kernel level analysis of data flow using(Nvidia Nsight Systems). https://docs.nvidia.com/nsight-systems/UserGuide/index.html
 - Device a method to alleviate data copy bottleneck in systems with shared memory architecture for the full pytorch implementation by building pytorch from source.
 - Do further analysis(function level: https://docs.python.org/3/library/profile.html#module-cProfile and Kernel Level: Nsight System)  to stem out bottlenecks once step 2 is done and propose architecture level modifications that address the issue.
+- Expand implementation to include fully connected layers.
 - Used quantization to further optimize the data movement latency and computational latency
 
 
