@@ -84,6 +84,6 @@ A. Defining a Layer
       $ python3 trainer.py --arch resnet20 --batch-size=4 --no-cuda
       
   3. Notes
-       - When running the test code(trainer.py) with the custom layers bw sure to use the --no-cuda option. Without that the model will be mapped to GPU/Accelerator and the test will fail.
+       - When running the test code(trainer.py) with the custom layers be sure to use the --no-cuda option. Without that option the model will be mapped to GPU/Accelerator and the test will fail.
        - Due to memory limitation on the Xavier platform when running the test codes avoid using very large batch sizes.
        - When running on a PC environment you can get a docker image from https://ngc.nvidia.com/catalog/containers/nvidia:tensorrt which has tensorrt set up.
