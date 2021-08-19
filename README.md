@@ -1,10 +1,19 @@
 # Low Precision Heterogenous DNN training
  
- This repository contains a report, TensorRT(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_TensorRT.py)  and Pytorch implementation(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_pytorch.py) of a custom conv2d layer for hetergenous training, and sample test codes.
+ This repository contains:
+ 
+ Project Report (https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/3f5441b156fd572cadad9df04450deef1673f1e0/Report.md), 
+ 
+ TensorRT Implementation (https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_TensorRT.py)  and 
+ 
+ Pytorch Implementation (https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_pytorch.py) 
+
+ of a custom conv2d layer for hetergenous training, and sample test codes.
  
    1. Setting up a working envoronment
     
    1.1 Jetson Xavier
+   
    When flashing the Jeston Xavier, TensorRT and all the necassary cuda packages are installed. The versions are given as below:
    
    To check the cuda version: 
@@ -51,31 +60,26 @@
    
    2. Cloning and running tests in this repository
    
-   Clone repo
+   Clone the repository
    
-        $ 
+        $  git clone https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training.git
+        $  cd Low_precision_CPU_Accelerator_Training
         
-        
-        
-        
+   To run per layer tests access the /tensorrt_pytorch_per_layer_tests directory and follow the tutorial
    
+       $  cd tensorrt_pytorch_per_layer_tests
+       
+   To run MNIST tests access the /mnist directory and follow the tutorial
    
+       $  cd mnist
+       
+   To run Resnet tests access the /resnet directory and follow the tutorial
    
-   
-   After checking the above requirments
- 
- ** You can find tests in the following directories**
- 1. Per layer test tensorrt and pytorch: /tensorrt_per_layer_test
+      $   cd resnet
+      
 
- 2. mnist test tensorrt and pytorch: /mnist
-
- 3. resnet test tensorrt and pytorch: /resnet
- 
- Note
- 
- The above tests are all done with pytorch v1.8.0 (https://pytorch.org/tutorials/) and TenorRT v7.1.3.0(https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/index.html), both on Jetson Xavier and PC.
-
-    To do
+   
+  # To do
 
 - Detailed OS and Kernel level analysis of data flow using(Nvidia Nsight Systems). https://docs.nvidia.com/nsight-systems/UserGuide/index.html
 - Device a method to alleviate data copy bottleneck in systems with shared memory architecture for the full pytorch implementation by building pytorch from source.
