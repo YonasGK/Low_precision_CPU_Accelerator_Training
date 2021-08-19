@@ -10,9 +10,9 @@
 
  of a custom conv2d layer for hetergenous training, and sample test codes.
  
-   1. Setting up a working envoronment
+   # 1. Setting up a working envoronment
     
-   1.1 Jetson Xavier
+   ## 1.1 Jetson Xavier
    
    When flashing the Jeston Xavier, TensorRT and all the necassary cuda packages are installed. The versions are given as below:
    
@@ -32,7 +32,7 @@
    
    After installing the above packages, we can proceed to cloning this repository and running the tests as shown in section 2 below.
    
-   1.2 Desktop
+  ## 1.2 Desktop
     
    Nvidia provides a Docker Image, which has TensorRT and all the necassary cuda packages installed. We have compiled a summerized setup  procedure below.
    
@@ -58,7 +58,7 @@
    You can find the detailed steps on how to set up the docker environment in the link: https://ngc.nvidia.com/catalog/containers/nvidia:tensorrt.
    
    
-   2. Cloning and running tests in this repository
+  #  2. Cloning and running tests in this repository
    
    Clone the repository
    
