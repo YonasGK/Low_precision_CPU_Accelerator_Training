@@ -113,7 +113,7 @@
  
      $ nsys stats [options] report1.qdrep
  
- One option used very often in our work is
+ One option used very often in our work is 'gputrace', which provides a detailed timeline of GPU kernel calls.
 
     $ nsys stats --report gputrace report1.qdrep
  
