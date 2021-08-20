@@ -21,11 +21,15 @@
      
         
    **FOR Pytorch+TensorRT convolution layer**
+   
+   Replace the vanilla conv2d layer with the custom one as shown below
           
        import conv_CPU_Acc_TensorRT as dla    
        self.conv1=dla.Conv_2d_DLA(input_name="conv", in_channel=1, output_channel=0, kernel_shape=(3,3),dtype=trt.float16, stride=(1,1), padding=(0,0), dilation=(1,1), groups=1, bias=False)
        
    **FOR full Pytorch custom convolution layer** 
+   
+   Replace the vanilla conv2d layer with the custom one as shown below
         
        import conv_CPU_Acc_pytoch as dla
        self.conv1=dla.custom_conv2d(in_channel=1, out_channel=0, kernel_shape=(3,3), stride=(1,1), padding=(0,0), dilation=(1,1), groups=1, bias=False)
@@ -55,9 +59,9 @@
         --log-interval N     how many batches to wait before logging training status
         --save-model         For Saving the current Model
 
-     You can then tun a test as shown below.
+   You can then tun a test as shown below.
                   
-         $ python3 test_mnist --no-cuda --batch-size=4
+         $ python3 test_mnist.py --no-cuda --batch-size=4
          
   # 3. Notes
    - When running the test code(test_mnist.py) with the custom layers be sure to use the --no-cuda option. Without that option the model will be completely mapped to GPU/Accelerator and the test will fail.
