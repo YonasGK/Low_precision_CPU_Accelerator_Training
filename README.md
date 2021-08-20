@@ -65,18 +65,23 @@
         $  git clone https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training.git
         $  cd Low_precision_CPU_Accelerator_Training
         
-   To run per layer tests access the /tensorrt_pytorch_per_layer_tests directory and follow the tutorial
+   To run per layer tests access the /tensorrt_pytorch_per_layer_tests directory
    
        $  cd tensorrt_pytorch_per_layer_tests
        
-   To run MNIST tests access the /mnist directory and follow the tutorial
+   And follow the tutorial in the link(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/README.md)
+   
+   To run MNIST tests access the /mnist directory
    
        $  cd mnist
-       
-   To run Resnet tests access the /resnet directory and follow the tutorial
+   
+   And follow the tutorial in the link(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/mnist/README.md)
+    
+   To run Resnet tests access the /resnet directory 
    
       $   cd resnet
-      
+  
+  ANd follow the tutorial in the link(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/resnet/README.md)    
   
   ## 3. Function level and Kernel level profiling
   
@@ -87,7 +92,7 @@
   ##### Usage
   
       import cProfile, pstats, io
-      from pstats import SortKey
+      
       pr = cProfile.Profile()
       pr.enable()
       # ... do something ...
@@ -106,16 +111,28 @@
  
  To profile an application from command line
  
-     $ nsys profile [options] <application> [application-arguments]
+     nsys profile [options] <application> [application-arguments]
  
  Then you will obtain a '.qdrep' file which can be viewed from the command line as
  
  
-     $ nsys stats [options] report1.qdrep
+     nsys stats [options] [file_name]
+  
+ For instance, to profile a test code 'test_pytorch.py' from /tensorrt_pytorch_per_layer_tests
+     
+     cd tensorrt_pytorch_per_layer_tests
  
+  Run the application as shown below
+ 
+     nsys profile test_pytorch.py
+     
+  View the statistics as shown below
+  
+     nsys stats report1.qdrep
+    
  One option used very often in our work is 'gputrace', which provides a detailed timeline of GPU kernel calls.
 
-    $ nsys stats --report gputrace report1.qdrep
+     nsys stats --report gputrace report1.qdrep
  
  
  You can also use the GUI by importing the '.qdrep' file to the GUI
