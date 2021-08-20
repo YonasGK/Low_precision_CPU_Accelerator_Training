@@ -117,7 +117,7 @@ class use_DLA():
             config.default_device_type= trt.DeviceType.GPU
             config.set_flag(trt.BuilderFlag.REFIT)
             config.set_flag(trt.BuilderFlag.FP16)
-            config.max_workspace_size = 1 << 30
+            config.max_workspace_size = 1 << 20
             self.populate_network(network, weights, bias)
             self.network=network
             return builder.build_engine(network, config)
@@ -132,7 +132,7 @@ class use_DLA():
                 builder.max_batch_size = self.batch_size
             builder.refittable =True
             config.default_device_type= trt.DeviceType.GPU
-            config.max_workspace_size= 1 << 30
+            config.max_workspace_size= 1 << 20
             config.set_flag(trt.BuilderFlag.REFIT)
             config.set_flag(trt.BuilderFlag.FP16)
             if self.grad_weight==True:
