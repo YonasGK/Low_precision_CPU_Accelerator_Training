@@ -46,7 +46,7 @@ Our goal with this test is to show the convergence of our implementation, to obs
   ### B. Running Test
    You can run the test file trainer.py with the following options
                   
-        $ python3 trainer.py --help
+        python3 trainer.py --help
         ['resnet110', 'resnet1202', 'resnet20', 'resnet32', 'resnet44', 'resnet56']
         usage: trainer.py [-h] [--arch ARCH] [-j N] [--epochs N] [--start-epoch N]
                   [-b N] [--lr LR] [--momentum M] [--weight-decay W]
@@ -81,7 +81,7 @@ Our goal with this test is to show the convergence of our implementation, to obs
  
   Here is an example:
       
-      $ python3 trainer.py --arch resnet20 --batch-size=4 --no-cuda
+       python3 trainer.py --arch resnet20 --batch-size=4 --no-cuda
       
  ## 3. Notes
  
