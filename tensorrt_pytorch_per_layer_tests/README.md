@@ -8,8 +8,8 @@
 
    To run the tests: run
                       
-        $ python3 test_pytorch.py
-        $ python3 test_tensorrt.py
+        python3 test_pytorch.py
+        python3 test_tensorrt.py
 
 ## 3.  Initilizing the custom conv2d modules.
   
