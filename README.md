@@ -4,11 +4,11 @@
  
  Project Report (https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/3f5441b156fd572cadad9df04450deef1673f1e0/Report.md), 
  
- TensorRT Implementation (https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_TensorRT.py)  and 
+ TensorRT Implementation  of a custom conv2d layer for hetergenous training,(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_TensorRT.py)  and 
  
- Pytorch Implementation (https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_pytorch.py) 
+ Pytorch Implementation  of a custom conv2d layer for hetergenous training,(https://github.com/YonasGK/Low_precision_CPU_Accelerator_Training/blob/main/tensorrt_pytorch_per_layer_tests/conv_CPU_Acc_pytorch.py) 
 
- of a custom conv2d layer for hetergenous training, and sample test codes.
+ and sample test codes.
  
    ## 1. Setting up a working envoronment
     
