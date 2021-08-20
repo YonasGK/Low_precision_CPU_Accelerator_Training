@@ -10,9 +10,9 @@
 
  of a custom conv2d layer for hetergenous training, and sample test codes.
  
-   # 1. Setting up a working envoronment
+   ## 1. Setting up a working envoronment
     
-   ## 1.1 Jetson Xavier
+   ### 1.1 Jetson Xavier
    
    When flashing the Jeston Xavier, TensorRT and all the necassary cuda packages are installed. The versions are given as below:
    
@@ -32,17 +32,17 @@
    
    After installing the above packages, we can proceed to cloning this repository and running the tests as shown in section 2 below.
    
-  ## 1.2 Desktop
+  ### 1.2 Desktop
     
    Nvidia provides a Docker Image, which has TensorRT and all the necassary cuda packages installed. We have compiled a summerized setup  procedure below.
    
    Pull a docker image
    
-        $ docker pull nvcr.io/nvidia/tensorrt:21.07-py3
+        $ docker pull nvcr.io/nvidia/tensorrt:21.06-py3
         
    Run the docker image
    
-        $ sudo docker run --gpus all -it --rm -v local_dir:container_dir nvcr.io/nvidia/tensorrt:21.07-py3
+        $ sudo docker run --gpus all -it --rm -v local_dir:container_dir nvcr.io/nvidia/tensorrt:21.06-py3
    
    Install python dependencies
    
@@ -58,7 +58,7 @@
    You can find the detailed steps on how to set up the docker environment in the link: https://ngc.nvidia.com/catalog/containers/nvidia:tensorrt.
    
    
-  #  2. Cloning and running tests in this repository
+  ##  2. Cloning and running tests in this repository
    
    Clone the repository
    
@@ -77,6 +77,54 @@
    
       $   cd resnet
       
+  
+  ## 3. Function level and Kernel level profiling
+  
+  ### 3.1 Function level profiling
+  
+  In our project the profiler used for function level analysis is CProfile which is incorporated in the python package.
+  
+  ##### Usage
+  
+      import cProfile, pstats, io
+      from pstats import SortKey
+      pr = cProfile.Profile()
+      pr.enable()
+      # ... do something ...
+     pr.disable()
+     pr.print_stats(sort=2)
+     
+  During printing, the sort parameter indicates which field to use to sort the profiled values. For instance, in the above example '2' indicates to sort using the cumulative time per each function call.
+  
+  For detailed documentation, please refer to the link: https://docs.python.org/3/library/profile.html#module-cProfile
+  
+ ### 3.2 Kernel level profiling
+ 
+ In our project we used Nvidia Nsight Systems to do a deep Kernel level anaysis of the GPU. The given profiler is installed as part of the CUDA Toolkit and analysis could entirly be done on the shell with Command Line Interface(https://docs.nvidia.com/nsight-systems/UserGuide/index.html#cli-installing), however if you want to use a GUI(highly recommended) to observe the details of the profiled application you can install it from the link: https://developer.nvidia.com/nsight-systems.
+ 
+ ##### Usage
+ 
+ To profile an application from command line
+ 
+     $ nsys profile [options] <application> [application-arguments]
+ 
+ Then you will obtain a '.qdrep' file which can be viewed from the command line as
+ 
+ 
+     $ nsys stats [options] report1.qdrep
+ 
+ One option used very often in our work is
+
+    $ nsys stats --report gputrace report1.qdrep
+ 
+ 
+ You can also use the GUI by importing the '.qdrep' file to the GUI
+ 
+ (Disclaimer: Although Nsight Systems can provide CPU profiling, we haven't used that option because CPU profiling occered to be a very heavy task which crashed the our Xavier board multiple times.)
+ 
+ For more details on Nvidia Nsight Systems please refer to the link: https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+ 
+  
 
    
   # To do
