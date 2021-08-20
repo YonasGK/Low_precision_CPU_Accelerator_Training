@@ -120,7 +120,7 @@
  
  You can also use the GUI by importing the '.qdrep' file to the GUI
  
- (Disclaimer: Although Nsight Systems can provide CPU profiling, we haven't used that option because CPU profiling occered to be a very heavy task which crashed the our Xavier board multiple times.)
+ (Disclaimer: Although Nsight Systems can provide CPU profiling, we haven't used that option because CPU profiling occured to be a very heavy task which crashed the our Xavier board multiple times.)
  
  For more details on Nvidia Nsight Systems please refer to the link: https://docs.nvidia.com/nsight-systems/UserGuide/index.html
  
