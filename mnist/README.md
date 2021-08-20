@@ -39,7 +39,7 @@
    You can run the test file test_mnist.py with the following options
         
             
-         $ python3 test_mnist.py --help
+         python3 test_mnist.py --help
          usage: test_mnist.py [-h] [--batch-size N] [--test-batch-size N] [--epochs N]
                      [--lr LR] [--gamma M] [--no-cuda] [--dry-run] [--seed S]
                      [--log-interval N] [--save-model]
@@ -61,7 +61,7 @@
 
    You can then tun a test as shown below.
                   
-         $ python3 test_mnist.py --no-cuda --batch-size=4
+          python3 test_mnist.py --no-cuda --batch-size=4
          
   # 3. Notes
    - When running the test code(test_mnist.py) with the custom layers be sure to use the --no-cuda option. Without that option the model will be completely mapped to GPU/Accelerator and the test will fail. By using --no-cuda we map the network to CPU and will only secretly invoke the GPU to do conv2d operation.
