@@ -91,8 +91,8 @@
       pr = cProfile.Profile()
       pr.enable()
       # ... do something ...
-     pr.disable()
-     pr.print_stats(sort=2)
+      pr.disable()
+      pr.print_stats(sort=2)
      
   During printing, the sort parameter indicates which field to use to sort the profiled values. For instance, in the above example '2' indicates to sort using the cumulative time per each function call.
   
